@@ -19,7 +19,7 @@ vector<vector<double>> loadData(const string& fileName){
     while(getline(file,line)){
         vector<double> row;
         istringstream ss(line);
-        //read values
+        //read and store values
         double val;
         while(ss >> val){
             row.push_back(val);
