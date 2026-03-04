@@ -10,6 +10,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::getline;
+using std::to_string;
 using std::string;
 using std::ifstream;
 using std::istringstream;
@@ -74,4 +75,34 @@ int main(){
 
     }
     return 0;
+}
+
+void forward_selection(vector<vector<double>> data){
+    set<int> current_set_of_features;
+
+    for(int i = 1; i < data.size(); i++){
+
+        cout << "On the " << to_string(i) << "th level of the search tree"<< endl;
+        
+        int feature_to_add_to_this_level = 0;
+        double best_so_far_acccuracy = 0;
+
+        for(int j = 1; j < data[i].size(); j++){
+            if(current_set_of_features.find(data[i][j]) == current_set_of_features.end()){
+
+                cout << "Considering adding the " << to_string(j) << " feature" << endl;
+
+                double accuracy = leave_one_out_cross_validation(data, current_set_of_features, j);
+
+                if(accuracy > best_so_far_acccuracy){
+                    best_so_far_acccuracy = accuracy;
+                    feature_to_add_to_this_level = j;
+                }
+            }
+        }
+        current_set_of_features.insert(feature_to_add_to_this_level);
+
+        cout << "On level " << to_string(i) << " added feature "
+        << to_string(feature_to_add_to_this_level) << " to current set"<< endl;
+    }
 }
