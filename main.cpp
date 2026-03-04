@@ -6,6 +6,7 @@
 using std::vector;
 using std::cin;
 using std::cout;
+using std::endl;
 using std::getline;
 using std::string;
 using std::ifstream;
@@ -35,5 +36,30 @@ vector<vector<double>> loadData(const string& fileName){
 int main(){
     string fileName;
 
+    cout << "Welcome to my Feature Selection Algorithm." << endl;
+    cout << "Type in the name of the file to test : " << endl;
+
+    cin >> fileName;
+
+    vector<vector<double>> data = loadData(fileName);
+
+    int answer = 0;
+    do{
+        cout << "Type the number of the algorithm you want to run." << endl;
+        cout << "1) Forward Selection" << endl;
+        cout << "2) Backward Elimination" << endl;
+
+        cin >> answer;
+        if(cin.fail()){
+            throw std::runtime_error("Invalid input!");
+        }
+    }while(answer != 1 || answer != 2);
+
+    if(answer == 1){
+
+    }
+    else{
+        
+    }
     return 0;
 }
