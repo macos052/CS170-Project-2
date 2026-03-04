@@ -41,6 +41,10 @@ double leave_one_out_cross_validation(vector<vector<double>> data, set<int> curr
     return rand();
 }
 
+void forward_selection(vector<vector<double>> data);
+
+void backward_elimination(vector<vector<double>> data);
+
 int main(){
     string fileName;
 
