@@ -2,6 +2,8 @@
 #include<fstream>
 #include<sstream>
 #include<vector>
+#include<set>
+#include<cstdlib>
 
 using std::vector;
 using std::cin;
@@ -11,6 +13,8 @@ using std::getline;
 using std::string;
 using std::ifstream;
 using std::istringstream;
+using std::set;
+using std::rand;
 
 vector<vector<double>> loadData(const string& fileName){
     vector<vector<double>> data;
@@ -31,6 +35,10 @@ vector<vector<double>> loadData(const string& fileName){
     }
     file.close();
     return data;
+}
+
+double leave_one_out_cross_validation(vector<vector<double>> data, set<int> current_set, int feature_to_add){
+    return rand();
 }
 
 int main(){
@@ -59,7 +67,7 @@ int main(){
 
     }
     else{
-        
+
     }
     return 0;
 }
