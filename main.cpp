@@ -150,7 +150,7 @@ void forward_selection(vector<vector<double> > data){
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
-                    feature_to_add_to_this_level = j;
+                    feature_to_add_to_this_level = data[j][0];
                 }
             }
         }
