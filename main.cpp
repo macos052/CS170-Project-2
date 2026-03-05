@@ -46,7 +46,7 @@ double leave_one_out_cross_validation(const vector<vector<double> >& data, const
         throw std::runtime_error("Empty data!");
     }
 
-    int correctClassification = 0;
+    double correctClassification = 0;
 
     vector<int> currentFeatures = current_set;
     if(feature_to_add != 0){ //prevent addition of dummy feature for backward elimination
