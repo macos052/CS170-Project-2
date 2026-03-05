@@ -145,7 +145,9 @@ void forward_selection(vector<vector<double> > data){
             }
         }
 
+        //push feature into set and history
         current_set_of_features.insert(feature_to_add_to_this_level);
+        best_overall_features.push_back(feature_to_add_to_this_level);
 
         if(best_so_far_acccuracy > best_overall_accuracy){ //store best accuracy and features
             best_overall_accuracy = best_so_far_acccuracy;
@@ -156,6 +158,7 @@ void forward_selection(vector<vector<double> > data){
         }
 
     }
+    cout << "Finished search! The best feature subset is {" << best_overall_accuracy << "}, which has an accuracy of " << to_string(best_overall_accuracy) << endl;
 }
 
 void backward_elimination(vector<vector<double> > data){}
