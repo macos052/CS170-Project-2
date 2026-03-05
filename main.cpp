@@ -42,7 +42,9 @@ vector<vector<double> > loadData(const string& fileName){
 }
 
 double leave_one_out_cross_validation(const vector<vector<double> >& data, const vector<int>& current_set, int feature_to_add){
-    double accuracy = 0;
+    if(data.empty()){ //prevent division by 0 return
+        throw std::runtime_error("Empty data!");
+    }
 
     int correctClassification = 0;
 
@@ -52,22 +54,32 @@ double leave_one_out_cross_validation(const vector<vector<double> >& data, const
     }
 
     for(int i = 0; i < data.size(); i++){
-        double nearestNeighborDistance = 0;
-        double nearestNeighborLabel = 0;
+        double nearestNeighborDistance = std::numeric_limits<double>::max(); //sets to maximum value of double 
+        double nearestNeighborLabel = 0; 
 
-        double distance = 0;
         for(int k = 0; k < data.size(); k++){
 
             if(k == i){continue;} //stops comparing against itself
 
+            double distance = 0; //reset distance
             for(int& j : currentFeatures){ //sum of all feature distances
                 distance += pow(data[i][j] - data[k][j],2);
             }
             distance = sqrt(distance);
-            
+
+            if(distance < nearestNeighborDistance){
+                nearestNeighborDistance = distance;
+                nearestNeighborLabel = data[k][0];
+            }
+
         }
+
+        if(nearestNeighborLabel == data[i][0]){
+            correctClassification ++;
+        }
+
     }
-    return accuracy;
+    return correctClassification / data.size();
 }
 
 void forward_selection(vector<vector<double> > data);
