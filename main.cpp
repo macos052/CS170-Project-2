@@ -134,9 +134,9 @@ void forward_selection(vector<vector<double> > data){
         for(int j = 1; j <= total_features; j++){
             if(current_set_of_features.find(j) == current_set_of_features.end()){
 
-                cout << "Considering adding the " << to_string(j) << " feature" << endl;
+                double accuracy = leave_one_out_cross_validation(data, best_overall_features, j) * 100;
 
-                double accuracy = leave_one_out_cross_validation(data, best_overall_features, j);
+                cout << "Considering adding the " << to_string(j) << " feature with accuracy " << to_string(accuracy) << endl;
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
