@@ -40,6 +40,16 @@ vector<vector<double> > loadData(const string& fileName){
     file.close();
     return data;
 }
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const vector<T> obj){
+    for(int i = 0; i < obj.size(); i++){
+        os << obj.at(i);
+        if(i != obj.size() - 1){
+            os << ",";
+        }
+    }
+    return os;
+}
 
 double leave_one_out_cross_validation(const vector<vector<double> >& data, const vector<int>& current_set, int feature_to_add){
     if(data.empty()){ //prevent division by 0 return
@@ -158,7 +168,7 @@ void forward_selection(vector<vector<double> > data){
         }
 
     }
-    cout << "Finished search! The best feature subset is {" << best_overall_accuracy << "}, which has an accuracy of " << to_string(best_overall_accuracy) << endl;
+    cout << "Finished search! The best feature subset is {" << best_overall_features << "}, which has an accuracy of " << to_string(best_overall_accuracy) << endl;
 }
 
 void backward_elimination(vector<vector<double> > data){}
