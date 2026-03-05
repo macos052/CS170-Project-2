@@ -4,6 +4,7 @@
 #include<vector>
 #include<unordered_set>
 #include<cstdlib>
+#include<cmath>
 
 using std::vector;
 using std::cin;
@@ -15,6 +16,8 @@ using std::string;
 using std::ifstream;
 using std::istringstream;
 using std::unordered_set;
+using std::sqrt;
+using std::pow;
 using std::rand;
 
 vector<vector<double> > loadData(const string& fileName){
@@ -38,8 +41,33 @@ vector<vector<double> > loadData(const string& fileName){
     return data;
 }
 
-double leave_one_out_cross_validation(vector<vector<double> > data, vector<int> current_set, int feature_to_add){
-    return rand();
+double leave_one_out_cross_validation(const vector<vector<double> >& data, const vector<int>& current_set, int feature_to_add){
+    double accuracy = 0;
+
+    int correctClassification = 0;
+
+    vector<int> currentFeatures = current_set;
+    if(feature_to_add != 0){ //prevent addition of dummy feature for backward elimination
+        currentFeatures.push_back(feature_to_add);
+    }
+
+    for(int i = 0; i < data.size(); i++){
+        double nearestNeighborDistance = 0;
+        double nearestNeighborLabel = 0;
+
+        double distance = 0;
+        for(int k = 0; k < data.size(); k++){
+
+            if(k == i){continue;} //stops comparing against itself
+
+            for(int& j : currentFeatures){ //sum of all feature distances
+                distance += pow(data[i][j] - data[k][j],2);
+            }
+            distance = sqrt(distance);
+            
+        }
+    }
+    return accuracy;
 }
 
 void forward_selection(vector<vector<double> > data);
@@ -110,10 +138,11 @@ void forward_selection(vector<vector<double> > data){
         if(best_so_far_acccuracy > best_overall_accuracy){ //store best accuracy and features
             best_overall_accuracy = best_so_far_acccuracy;
             best_overall_features.push_back(feature_to_add_to_this_level);
+
+            cout << "On level " << to_string(i) << " added feature "
+            << to_string(feature_to_add_to_this_level) << " to current set"<< endl;
         }
 
-        cout << "On level " << to_string(i) << " added feature "
-        << to_string(feature_to_add_to_this_level) << " to current set"<< endl;
     }
 }
 
