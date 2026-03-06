@@ -231,7 +231,6 @@ void backward_elimination(vector<vector<double> > data){
                 double accuracy = leave_one_out_cross_validation(data, current_vec, 0) * 100;
 
                 vector<int> output_vec = current_vec;
-                output_vec.push_back(j);
 
                 std::sort(output_vec.begin(), output_vec.end());
                 cout << "Using feature(s) {" << output_vec << "} accuracy is "
