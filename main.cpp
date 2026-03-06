@@ -50,7 +50,18 @@ std::ostream& operator<<(std::ostream& os, const vector<T> obj){
     }
     return os;
 }
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const std::unordered_set<T>& obj){
+    auto it = obj.begin();
 
+    while(it != obj.end()){
+        os << *it;
+        ++it;
+        if(it != obj.end()) os << ",";
+    }
+
+    return os;
+}
 double leave_one_out_cross_validation(const vector<vector<double> >& data, const vector<int>& current_set, int feature_to_add){
     if(data.empty()){ //prevent division by 0 return
         throw std::runtime_error("Empty data!");
@@ -172,7 +183,6 @@ void forward_selection(vector<vector<double> > data){
 
 void backward_elimination(vector<vector<double> > data){
     unordered_set<int> current_set_of_features;
-    vector<int> best_overall_features; //tracks best pairing of features
 
     int total_features = data[0].size() - 1;
     double best_overall_accuracy = 0;
@@ -191,14 +201,18 @@ void backward_elimination(vector<vector<double> > data){
 
             current_set_of_features.erase(j); //erase j
             vector<int> current_vec(current_set_of_features.begin(), current_set_of_features.end()); //build a vector excluding j each time
-            double accuracy = leave_one_out_cross_validation(data, current_vec, 0); //calculate accuracy
-            current_set_of_features.insert(j); //reinsert j
-            
-            if(accuracy > best_overall_accuracy){
-                best_overall_accuracy = accuracy;
-                best_overall_features = current_vec;
+            double accuracy = leave_one_out_cross_validation(data, current_vec, 0) * 100; //calculate accuracy
+
+            cout << "Considering adding the " << to_string(j) << " feature with accuracy " << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+
+            if(accuracy < best_overall_accuracy){
+                current_set_of_features.insert(j); //reinsert if accuracy drops
+                
+            }
+            else{//removing j improves accuracy so keep it erased
+                best_overall_accuracy = accuracy; //assign best accuracy
             }
         }
     }
-    cout << "Finished search! The best feature subset is {" << best_overall_features << "}, which has an accuracy of " << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl;
+    cout << "Finished search! The best feature subset is {" << current_set_of_features << "}, which has an accuracy of " << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl;
 }
