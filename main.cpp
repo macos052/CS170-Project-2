@@ -177,7 +177,7 @@ void forward_selection(vector<vector<double> > data){
         // Always add best feature this level
         current_set_of_features.insert(feature_to_add_to_this_level);
 
-        if(best_so_far_acccuracy > best_overall_accuracy){ // Store best accuracy and features
+        if(best_so_far_acccuracy >= best_overall_accuracy){ // Store best accuracy and features
 
             best_overall_accuracy = best_so_far_acccuracy;
             best_overall_features.push_back(feature_to_add_to_this_level);
@@ -246,7 +246,7 @@ void backward_elimination(vector<vector<double> > data){
         // Always remove best feature this level
         current_set_of_features.erase(feature_to_remove_this_level);
 
-        if(best_so_far_acccuracy > best_overall_accuracy){
+        if(best_so_far_acccuracy >= best_overall_accuracy){
             best_overall_accuracy = best_so_far_acccuracy;
 
             best_overall_features = vector<int>(current_set_of_features.begin(),
