@@ -45,7 +45,7 @@ std::ostream& operator<<(std::ostream& os, const vector<T> obj){
     for(int i = 0; i < obj.size(); i++){
         os << obj.at(i);
         if(i != obj.size() - 1){
-            os << ",";
+            os << ", ";
         }
     }
     return os;
@@ -59,7 +59,7 @@ std::ostream& operator<<(std::ostream& os, const std::unordered_set<T>& obj){
     for(size_t i = 0; i < currObj.size(); i++){
         os << currObj[i];
         if(i != currObj.size() - 1){
-            os << ",";
+            os << ", ";
         }
     }
 
@@ -184,6 +184,7 @@ void forward_selection(vector<vector<double> > data){
             best_overall_accuracy = best_so_far_acccuracy;
             best_overall_features.push_back(feature_to_add_to_this_level);
 
+            std::sort(best_overall_features.begin(), best_overall_features.end());
             cout << "Feature set {" << best_overall_features << "} was best, accuracy is " 
             << std::fixed << std::setprecision(2) << best_overall_accuracy << "%"<< endl; 
         }
