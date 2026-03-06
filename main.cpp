@@ -124,10 +124,6 @@ int main(){
     else{
         backward_elimination(data);
     }
-
-vector<int> test_features = {7, 10, 12};
-double test_accuracy = leave_one_out_cross_validation(data, test_features, 0) * 100;
-cout << "Test accuracy for {7,10,12}: " << std::fixed << std::setprecision(2) << test_accuracy << "%" << endl;
     return 0;
 }
 
