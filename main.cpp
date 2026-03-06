@@ -233,6 +233,7 @@ void backward_elimination(vector<vector<double> > data){
 
                 vector<int> output_vec = current_vec;
 
+                //output features and accuracy
                 std::sort(output_vec.begin(), output_vec.end());
                 cout << "Using feature(s) {" << output_vec << "} accuracy is "
                 << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
