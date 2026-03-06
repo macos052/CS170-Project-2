@@ -161,14 +161,12 @@ void forward_selection(vector<vector<double> > data){
 
                 double accuracy = leave_one_out_cross_validation(data, current_vec, j) * 100;
 
-                if(current_vec.empty()){
-                    cout << "Using feature(s) {" << j << "} accuracy is "
-                    << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
-                }
-                else{
-                    cout << "Using feature(s) {" << current_vec << ", " << j << "} accuracy is "
-                    << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
-                }
+                vector<int> output_vec = current_vec;
+                output_vec.push_back(j);
+
+                std::sort(output_vec.begin(), output_vec.end());
+                cout << "Using feature(s) {" << output_vec << "} accuracy is "
+                << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
@@ -229,18 +227,15 @@ void backward_elimination(vector<vector<double> > data){
                 temp_set.erase(j);
 
                 current_vec.assign(temp_set.begin(), temp_set.end());
-                std::sort(current_vec.begin(),current_vec.end());
 
                 double accuracy = leave_one_out_cross_validation(data, current_vec, 0) * 100;
 
-                if(current_vec.empty()){
-                    cout << "Using feature(s) {" << j << "} accuracy is "
-                    << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
-                }
-                else{
-                    cout << "Using feature(s) {" << current_vec << ", " << j << "} accuracy is "
-                    << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
-                }
+                vector<int> output_vec = current_vec;
+                output_vec.push_back(j);
+
+                std::sort(output_vec.begin(), output_vec.end());
+                cout << "Using feature(s) {" << output_vec << "} accuracy is "
+                << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
