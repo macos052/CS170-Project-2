@@ -146,21 +146,19 @@ void forward_selection(vector<vector<double> > data){
 
                 double accuracy = leave_one_out_cross_validation(data, best_overall_features, j) * 100;
 
-                cout << "Considering adding the " << to_string(j) << " feature with accuracy " << to_string(accuracy) << endl;
+                cout << "Considering adding the " << to_string(j) << " feature with accuracy " << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
-                    feature_to_add_to_this_level = data[j][0];
+                    feature_to_add_to_this_level = j;
                 }
             }
         }
 
-        //push feature into set and history
-        current_set_of_features.insert(feature_to_add_to_this_level);
-        best_overall_features.push_back(feature_to_add_to_this_level);
-
         if(best_so_far_acccuracy > best_overall_accuracy){ //store best accuracy and features
             best_overall_accuracy = best_so_far_acccuracy;
+            //push feature into set and history
+            current_set_of_features.insert(feature_to_add_to_this_level);
             best_overall_features.push_back(feature_to_add_to_this_level);
 
             cout << "On level " << to_string(i) << " added feature "
@@ -168,7 +166,7 @@ void forward_selection(vector<vector<double> > data){
         }
 
     }
-    cout << "Finished search! The best feature subset is {" << best_overall_features << "}, which has an accuracy of " << to_string(best_overall_accuracy) << endl;
+    cout << "Finished search! The best feature subset is {" << best_overall_features << "}, which has an accuracy of " << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl;
 }
 
 void backward_elimination(vector<vector<double> > data){}
