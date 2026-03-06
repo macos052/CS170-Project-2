@@ -206,7 +206,7 @@ void backward_elimination(vector<vector<double> > data){
             vector<int> current_vec(current_set_of_features.begin(), current_set_of_features.end()); //build a vector excluding j each time
             double accuracy = leave_one_out_cross_validation(data, current_vec, 0) * 100; //calculate accuracy
 
-            cout << "Considering adding the " << to_string(j) << " feature with accuracy " << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+            cout << "Considering removing the " << to_string(j) << " feature with accuracy " << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
 
             if(accuracy < best_overall_accuracy){
                 current_set_of_features.insert(j); //reinsert if accuracy drops
