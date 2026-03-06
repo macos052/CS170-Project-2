@@ -211,7 +211,7 @@ void backward_elimination(vector<vector<double> > data){
                 vector<int> current_vec(temp_set.begin(), temp_set.end());
                 double accuracy = leave_one_out_cross_validation(data, current_vec, 0) * 100;
 
-                cout << "Considering removing the " << to_string(j) << " feature with accuracy " << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+                cout << "Considering removing the " << to_string(j) << " feature, new accuracy " << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
