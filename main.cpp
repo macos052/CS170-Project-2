@@ -5,6 +5,8 @@
 #include<unordered_set>
 #include<cstdlib>
 #include<cmath>
+#include <chrono>
+#include <ctime>
 
 using std::vector;
 using std::cin;
@@ -132,12 +134,19 @@ int main(){
         }
     }while(answer != 1 && answer != 2);
 
+    auto start = std::chrono::high_resolution_clock::now();
+
     if(answer == 1){
         forward_selection(data);
     }
     else{
         backward_elimination(data);
     }
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    
+    cout << "Time elapsed: " << elapsed.count() << " seconds" << endl;
     return 0;
 }
 
