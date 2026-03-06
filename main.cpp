@@ -143,7 +143,7 @@ int main(){
 
 void forward_selection(vector<vector<double> > data){
     unordered_set<int> current_set_of_features;
-    vector<int> best_overall_features; //tracks best pairing of features
+    vector<int> best_overall_features; //tracks best subset features
 
     int total_features = data[0].size() - 1;
     double best_overall_accuracy = 0;
@@ -186,7 +186,7 @@ void forward_selection(vector<vector<double> > data){
 
 void backward_elimination(vector<vector<double> > data){
     unordered_set<int> current_set_of_features;
-    vector<int> best_overall_features; //tracks best pairing of features
+    vector<int> best_overall_features; //tracks best subset features
 
     int total_features = data[0].size() - 1;
     double best_overall_accuracy = 0;
