@@ -161,8 +161,14 @@ void forward_selection(vector<vector<double> > data){
 
                 double accuracy = leave_one_out_cross_validation(data, current_vec, j) * 100;
 
-                cout << "Using feature(s) {" << current_vec << "} accuracy is "
-                << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+                if(current_vec.empty()){
+                    cout << "Using feature(s) {" << j << "} accuracy is "
+                    << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+                }
+                else{
+                    cout << "Using feature(s) {" << current_vec << ", " << j << "} accuracy is "
+                    << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+                }
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
@@ -226,8 +232,14 @@ void backward_elimination(vector<vector<double> > data){
 
                 double accuracy = leave_one_out_cross_validation(data, current_vec, 0) * 100;
 
-                cout << "Using feature(s) {" << current_vec << "} accuracy is " 
-                << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+                if(current_vec.empty()){
+                    cout << "Using feature(s) {" << j << "} accuracy is "
+                    << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+                }
+                else{
+                    cout << "Using feature(s) {" << current_vec << ", " << j << "} accuracy is "
+                    << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+                }
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
