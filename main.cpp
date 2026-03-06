@@ -52,12 +52,15 @@ std::ostream& operator<<(std::ostream& os, const vector<T> obj){
 }
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const std::unordered_set<T>& obj){
-    auto it = obj.begin();
+    std::vector<T> currObj(obj.begin(), obj.end());
 
-    while(it != obj.end()){
-        os << *it;
-        ++it;
-        if(it != obj.end()) os << ",";
+    std::sort(currObj.begin(), currObj.end());
+
+    for(size_t i = 0; i < currObj.size(); i++){
+        os << currObj[i];
+        if(i != currObj.size() - 1){
+            os << ",";
+        }
     }
 
     return os;
