@@ -179,7 +179,7 @@ void forward_selection(vector<vector<double> > data){
             best_overall_features.push_back(feature_to_add_to_this_level);
 
             cout << "Feature set {" << best_overall_features << "} was best, accuracy is " 
-            << std::fixed << std::setprecision(2) << best_overall_accuracy << endl; 
+            << std::fixed << std::setprecision(2) << best_overall_accuracy << "%"<< endl; 
         }
 
     }
@@ -234,7 +234,7 @@ void backward_elimination(vector<vector<double> > data){
             current_set_of_features.end());
 
             cout << "Feature set {" << best_overall_features << "} was best, accuracy is " 
-            << std::fixed << std::setprecision(2) << best_overall_accuracy << endl; 
+            << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl; 
         }
     }
     std::sort(best_overall_features.begin(), best_overall_features.end());
