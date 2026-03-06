@@ -214,6 +214,8 @@ void backward_elimination(vector<vector<double> > data){
             }
             else{//removing j improves accuracy so keep it erased
                 best_overall_accuracy = accuracy; //assign best accuracy
+                cout << "On level " << to_string(i) << " removed feature "
+                << to_string(j) << " from current set"<< endl;
             }
         }
     }
