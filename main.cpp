@@ -150,17 +150,19 @@ void forward_selection(vector<vector<double> > data){
 
     for(int i = 1; i <= total_features; i++){
 
-        cout << "On the " << to_string(i) << "th level of the search tree"<< endl;
-
         int feature_to_add_to_this_level = 0;
         double best_so_far_acccuracy = 0;
 
         for(int j = 1; j <= total_features; j++){
             if(current_set_of_features.find(j) == current_set_of_features.end()){
-                vector<int> current_vec(current_set_of_features.begin(), current_set_of_features.end());
+
+                vector<int> current_vec(current_set_of_features.begin(),
+                current_set_of_features.end());
+
                 double accuracy = leave_one_out_cross_validation(data, current_vec, j) * 100;
 
-                cout << "Considering adding the " << to_string(j) << " feature with accuracy " << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+                cout << "Using feature(s) {" << current_vec << "} accuracy is "
+                << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
@@ -176,13 +178,16 @@ void forward_selection(vector<vector<double> > data){
             best_overall_accuracy = best_so_far_acccuracy;
             best_overall_features.push_back(feature_to_add_to_this_level);
 
-            cout << "On level " << to_string(i) << " added feature "
-            << to_string(feature_to_add_to_this_level) << " to current set"<< endl;
+            cout << "Feature set {" << best_overall_features << "} was best, accuracy is " 
+            << std::fixed << std::setprecision(2) << best_overall_accuracy << endl; 
         }
 
     }
     std::sort(best_overall_features.begin(), best_overall_features.end());
-    cout << "Finished search! The best feature subset is {" << best_overall_features << "}, which has an accuracy of " << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl;
+
+    cout << "Finished search! The best feature subset is {" << best_overall_features
+     << "}, which has an accuracy of " << std::fixed << std::setprecision(2)
+     << best_overall_accuracy << "%" << endl;
 }
 
 void backward_elimination(vector<vector<double> > data){
@@ -199,8 +204,6 @@ void backward_elimination(vector<vector<double> > data){
 
     for(int i = 1; i <= total_features; i++){
 
-        cout << "On the " << to_string(i) << "th level of the search tree"<< endl;
-
         int feature_to_remove_this_level = 0;
         double best_so_far_acccuracy = 0;
 
@@ -212,7 +215,8 @@ void backward_elimination(vector<vector<double> > data){
                 vector<int> current_vec(temp_set.begin(), temp_set.end());
                 double accuracy = leave_one_out_cross_validation(data, current_vec, 0) * 100;
 
-                cout << "Considering removing the " << to_string(j) << " feature, new accuracy " << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
+                cout << "Using feature(s) {" << current_vec << "} accuracy is " 
+                << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
 
                 if(accuracy > best_so_far_acccuracy){
                     best_so_far_acccuracy = accuracy;
@@ -225,12 +229,17 @@ void backward_elimination(vector<vector<double> > data){
 
         if(best_so_far_acccuracy > best_overall_accuracy){
             best_overall_accuracy = best_so_far_acccuracy;
-            best_overall_features = vector<int>(current_set_of_features.begin(), current_set_of_features.end());
 
-            cout << "On level " << to_string(i) << " removed feature "
-            << to_string(feature_to_remove_this_level) << " from current set"<< endl;
+            best_overall_features = vector<int>(current_set_of_features.begin(),
+            current_set_of_features.end());
+
+            cout << "Feature set {" << best_overall_features << "} was best, accuracy is " 
+            << std::fixed << std::setprecision(2) << best_overall_accuracy << endl; 
         }
     }
     std::sort(best_overall_features.begin(), best_overall_features.end());
-    cout << "Finished search! The best feature subset is {" << best_overall_features << "}, which has an accuracy of " << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl;
+
+    cout << "Finished search! The best feature subset is {" << best_overall_features
+    << "}, which has an accuracy of " << std::fixed << std::setprecision(2)
+    << best_overall_accuracy << "%" << endl;
 }
