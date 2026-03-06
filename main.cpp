@@ -181,6 +181,7 @@ void forward_selection(vector<vector<double> > data){
         }
 
     }
+    std::sort(best_overall_features.begin(), best_overall_features.end());
     cout << "Finished search! The best feature subset is {" << best_overall_features << "}, which has an accuracy of " << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl;
 }
 
