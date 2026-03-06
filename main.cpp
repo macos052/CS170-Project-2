@@ -202,6 +202,14 @@ void backward_elimination(vector<vector<double> > data){
         current_set_of_features.insert(i);
     }
 
+    vector<int> current_vec(current_set_of_features.begin(), current_set_of_features.end());
+    std::sort(current_vec.begin(),current_vec.end());
+    
+    best_overall_accuracy = leave_one_out_cross_validation(data, current_vec, 0) * 100;
+    
+    cout << "Using feature(s) {" << current_vec << "} accuracy is " 
+    << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl;
+
     for(int i = 1; i <= total_features; i++){
 
         int feature_to_remove_this_level = 0;
@@ -212,7 +220,10 @@ void backward_elimination(vector<vector<double> > data){
                 // Temporarily remove j to test without it
                 unordered_set<int> temp_set = current_set_of_features;
                 temp_set.erase(j);
-                vector<int> current_vec(temp_set.begin(), temp_set.end());
+
+                current_vec.assign(temp_set.begin(), temp_set.end());
+                std::sort(current_vec.begin(),current_vec.end());
+
                 double accuracy = leave_one_out_cross_validation(data, current_vec, 0) * 100;
 
                 cout << "Using feature(s) {" << current_vec << "} accuracy is " 
@@ -232,7 +243,9 @@ void backward_elimination(vector<vector<double> > data){
 
             best_overall_features = vector<int>(current_set_of_features.begin(),
             current_set_of_features.end());
-
+            
+            std::sort(best_overall_features.begin(), best_overall_features.end());
+            
             cout << "Feature set {" << best_overall_features << "} was best, accuracy is " 
             << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl; 
         }
