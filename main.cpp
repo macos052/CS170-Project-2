@@ -143,7 +143,7 @@ int main(){
 
 void forward_selection(vector<vector<double> > data){
     unordered_set<int> current_set_of_features;
-    vector<int> best_overall_features; //tracks best subset features
+    vector<int> best_overall_features; // Tracks best subset features
 
     int total_features = data[0].size() - 1;
     double best_overall_accuracy = 0;
@@ -168,10 +168,10 @@ void forward_selection(vector<vector<double> > data){
                 }
             }
         }
-        //always add best feature this level to current set
+        // Always add best feature this level
         current_set_of_features.insert(feature_to_add_to_this_level);
 
-        if(best_so_far_acccuracy > best_overall_accuracy){ //store best accuracy and features
+        if(best_so_far_acccuracy > best_overall_accuracy){ // Store best accuracy and features
 
             best_overall_accuracy = best_so_far_acccuracy;
             best_overall_features.push_back(feature_to_add_to_this_level);
