@@ -28,12 +28,12 @@ vector<vector<double> > loadData(const string& fileName){
     while(getline(file,line)){
         vector<double> row;
         istringstream ss(line);
-        //read and store values
+        // Read and store values
         double val;
         while(ss >> val){
             row.push_back(val);
         }
-        if(!row.empty()){ //push valid, non-empty rows to vector
+        if(!row.empty()){ // Push valid, non-empty rows to vector
             data.push_back(row);
         }
     }
@@ -66,27 +66,27 @@ std::ostream& operator<<(std::ostream& os, const std::unordered_set<T>& obj){
     return os;
 }
 double leave_one_out_cross_validation(const vector<vector<double> >& data, const vector<int>& current_set, int feature_to_add){
-    if(data.empty()){ //prevent division by 0 return
+    if(data.empty()){ // Prevent division by 0 return
         throw std::runtime_error("Empty data!");
     }
 
     double correctClassification = 0;
 
     vector<int> currentFeatures = current_set;
-    if(feature_to_add != 0){ //prevent addition of dummy feature for backward elimination
+    if(feature_to_add != 0){ // Prevent addition of dummy feature for backward elimination
         currentFeatures.push_back(feature_to_add);
     }
 
     for(int i = 0; i < data.size(); i++){
-        double nearestNeighborDistance = std::numeric_limits<double>::max(); //sets to maximum value of double 
+        double nearestNeighborDistance = std::numeric_limits<double>::max(); // Sets to maximum value of double 
         double nearestNeighborLabel = 0; 
 
         for(int k = 0; k < data.size(); k++){
 
-            if(k == i){continue;} //stops comparing against itself
+            if(k == i){continue;} // Stops comparing against itself
 
-            double distance = 0; //reset distance
-            for(int& j : currentFeatures){ //sum of all feature distances
+            double distance = 0; // Reset distance
+            for(int& j : currentFeatures){ // Sum of all feature distances
                 distance += pow(data[i][j] - data[k][j],2);
             }
             distance = sqrt(distance);
