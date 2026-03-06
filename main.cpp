@@ -177,38 +177,28 @@ void backward_elimination(vector<vector<double> > data){
     int total_features = data[0].size() - 1;
     double best_overall_accuracy = 0;
 
+    for(int i = 1; i <= total_features; i++){//fill current set with all features
+        current_set_of_features.insert(i);
+    }
+
     for(int i = 1; i <= total_features; i++){
 
         cout << "On the " << to_string(i) << "th level of the search tree"<< endl;
 
-        int feature_to_add_to_this_level = 0;
         double best_so_far_acccuracy = 0;
 
-        for(int j = 1; j <= total_features; j++){
-            if(current_set_of_features.find(j) == current_set_of_features.end()){
-                vector<int> current_vec(current_set_of_features.begin(), current_set_of_features.end());
-                double accuracy = leave_one_out_cross_validation(data, current_vec, j) * 100;
+        for(int j = 1; j <= total_features; j++){ 
 
-                cout << "Considering adding the " << to_string(j) << " feature with accuracy " << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
-
-                if(accuracy > best_so_far_acccuracy){
-                    best_so_far_acccuracy = accuracy;
-                    feature_to_add_to_this_level = j;
-                }
+            current_set_of_features.erase(j); //erase j
+            vector<int> current_vec(current_set_of_features.begin(), current_set_of_features.end()); //build a vector excluding j each time
+            double accuracy = leave_one_out_cross_validation(data, current_vec, 0); //calculate accuracy
+            current_set_of_features.insert(j); //reinsert j
+            
+            if(accuracy > best_overall_accuracy){
+                best_overall_accuracy = accuracy;
+                best_overall_features = current_vec;
             }
         }
-        //always add best feature this level to current set
-        current_set_of_features.insert(feature_to_add_to_this_level);
-
-        if(best_so_far_acccuracy > best_overall_accuracy){ //store best accuracy and features
-
-            best_overall_accuracy = best_so_far_acccuracy;
-            best_overall_features.push_back(feature_to_add_to_this_level);
-
-            cout << "On level " << to_string(i) << " added feature "
-            << to_string(feature_to_add_to_this_level) << " to current set"<< endl;
-        }
-
     }
     cout << "Finished search! The best feature subset is {" << best_overall_features << "}, which has an accuracy of " << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl;
 }
