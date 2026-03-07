@@ -27,6 +27,10 @@ vector<vector<double> > loadData(const string& fileName){
     ifstream file(fileName);
     string line;
 
+    if(!file.is_open()){
+        throw std::runtime_error("file not open!");
+    }
+    
     while(getline(file,line)){
         vector<double> row;
         istringstream ss(line);
