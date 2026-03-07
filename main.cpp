@@ -145,7 +145,7 @@ int main(){
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
-    
+
     cout << "Time elapsed: " << elapsed.count() << " seconds" << endl;
     return 0;
 }
@@ -156,6 +156,11 @@ void forward_selection(vector<vector<double> > data){
 
     int total_features = data[0].size() - 1;
     double best_overall_accuracy = 0;
+
+    //print default rate
+    cout << "Using feature(s) {" << "} accuracy is " 
+    << std::fixed << std::setprecision(2) << 
+    leave_one_out_cross_validation(data,{},0) << "%" << endl;
 
     for(int i = 1; i <= total_features; i++){
 
