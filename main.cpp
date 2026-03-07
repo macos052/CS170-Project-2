@@ -44,7 +44,7 @@ vector<vector<double> > loadData(const string& fileName){
 }
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const vector<T> obj){
-    for(int i = 0; i < obj.size(); i++){
+    for(size_t i = 0; i < obj.size(); i++){
         os << obj.at(i);
         if(i != obj.size() - 1){
             os << ", ";
