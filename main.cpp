@@ -164,7 +164,7 @@ void forward_selection(vector<vector<double> > data){
     //print default rate
     cout << "Using feature(s) {" << "} accuracy is " 
     << std::fixed << std::setprecision(2) << 
-    leave_one_out_cross_validation(data,{},0) << "%" << endl;
+    leave_one_out_cross_validation(data,{},0)*100 << "%" << endl;
 
     for(int i = 1; i <= total_features; i++){
 
