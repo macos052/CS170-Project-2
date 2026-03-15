@@ -22,6 +22,9 @@ using std::sqrt;
 using std::pow;
 using std::rand;
 
+// Reads a space-separated ASCII dataset file into a 2D vector of doubles.
+// Column 0 of each row is the class label (1 or 2); remaining columns are features.
+// Uses istringstream with >> operator, which automatically handles whitespace separation.
 vector<vector<double> > loadData(const string& fileName){
     vector<vector<double> > data;
     ifstream file(fileName);
@@ -71,6 +74,10 @@ std::ostream& operator<<(std::ostream& os, const std::unordered_set<T>& obj){
 
     return os;
 }
+
+// Evaluates a feature subset via Leave-One-Out Cross-Validation (LOOCV) using 1-NN (1-Nearest Neighbor).
+// feature_to_add = 0 signals Backward Elimination (no new feature appended).
+// Returns classification accuracy in range [0.0, 1.0].
 double leave_one_out_cross_validation(const vector<vector<double> >& data, const vector<int>& current_set, int feature_to_add){
     if(data.empty()){ // Prevent division by 0 return
         throw std::runtime_error("Empty data!");
@@ -112,8 +119,15 @@ double leave_one_out_cross_validation(const vector<vector<double> >& data, const
     return correctClassification / data.size();
 }
 
+// Greedy Forward Selection: starts with an empty set, adds the single best
+// feature at each level based on LOOCV accuracy. 
+// Tracks the globally best feature subset seen across all levels,
+// not just the final accumulated set.
 void forward_selection(vector<vector<double> > data);
 
+// Greedy Backward Elimination: starts with all features, removes the feature
+// whose removal yields the highest LOOCV accuracy at each level.
+// Uses feature_to_add=0 in LOOCV to indicate no new feature is being tested.
 void backward_elimination(vector<vector<double> > data);
 
 int main(){
