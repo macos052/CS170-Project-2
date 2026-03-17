@@ -3,7 +3,6 @@
 #include<sstream>
 #include<vector>
 #include<unordered_set>
-#include<cstdlib>
 #include<cmath>
 #include <chrono>
 #include <ctime>
@@ -20,8 +19,8 @@ using std::istringstream;
 using std::unordered_set;
 using std::sqrt;
 using std::pow;
-using std::rand;
-
+// Assumes first column of each row is class label (1 or 2), remaining columns are features
+// Ignores empty lines
 // Reads a space-separated ASCII dataset file into a 2D vector of doubles.
 // Column 0 of each row is the class label (1 or 2); remaining columns are features.
 // Uses istringstream with >> operator, which automatically handles whitespace separation.
@@ -49,6 +48,9 @@ vector<vector<double> > loadData(const string& fileName){
     file.close();
     return data;
 }
+
+// Overloaded << operators to print vector and unordered_set nicely
+// For unordered_set, convert to sorted vector before printing
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const vector<T> obj){
     for(size_t i = 0; i < obj.size(); i++){
@@ -85,25 +87,30 @@ double leave_one_out_cross_validation(const vector<vector<double> >& data, const
 
     double correctClassification = 0;
 
+    // Prepare feature subset: start with current_set, optionally add feature_to_add
     vector<int> currentFeatures = current_set;
     if(feature_to_add != 0){ // Prevent addition of dummy feature for backward elimination
         currentFeatures.push_back(feature_to_add);
     }
 
+    // For each instance in the dataset
     for(int i = 0; i < data.size(); i++){
         double nearestNeighborDistance = std::numeric_limits<double>::max(); // Sets to maximum value of double 
         double nearestNeighborLabel = 0; 
 
+        // For each other instance in the dataset
         for(int k = 0; k < data.size(); k++){
 
             if(k == i){continue;} // Stops comparing against itself
 
+            // Compute Euclidean distance between instance i and instance k using selected features
             double distance = 0; // Reset distance
-            for(int& j : currentFeatures){ // Sum of all feature distances
+            for(int& j : currentFeatures){// Sum of squared differences for selected features
                 distance += pow(data[i][j] - data[k][j],2);
             }
-            distance = sqrt(distance);
+            distance = sqrt(distance);// Final Euclidean distance
 
+            // Update nearest neighbor if this distance is smaller
             if(distance < nearestNeighborDistance){
                 nearestNeighborDistance = distance;
                 nearestNeighborLabel = data[k][0];
@@ -111,11 +118,13 @@ double leave_one_out_cross_validation(const vector<vector<double> >& data, const
 
         }
 
+        // Increment correctClassification if predicted label matches actual
         if(nearestNeighborLabel == data[i][0]){
             correctClassification ++;
         }
 
     }
+    // Return fraction of correctly classified instances (accuracy)
     return correctClassification / data.size();
 }
 
@@ -123,13 +132,18 @@ double leave_one_out_cross_validation(const vector<vector<double> >& data, const
 // feature at each level based on LOOCV accuracy. 
 // Tracks the globally best feature subset seen across all levels,
 // not just the final accumulated set.
-void forward_selection(vector<vector<double> > data);
+void forward_selection(const vector<vector<double> >& data);
 
 // Greedy Backward Elimination: starts with all features, removes the feature
 // whose removal yields the highest LOOCV accuracy at each level.
 // Uses feature_to_add=0 in LOOCV to indicate no new feature is being tested.
-void backward_elimination(vector<vector<double> > data);
+void backward_elimination(const vector<vector<double> >& data);
 
+// Main program flow:
+// 1. Prompt user for input file
+// 2. Load dataset
+// 3. Ask user to select Forward Selection or Backward Elimination
+// 4. Measure and print execution time
 int main(){
     string fileName;
 
@@ -168,7 +182,7 @@ int main(){
     return 0;
 }
 
-void forward_selection(vector<vector<double> > data){
+void forward_selection(const vector<vector<double> >& data){
     unordered_set<int> current_set_of_features;
     vector<int> best_overall_features; // Tracks best subset features
 
@@ -180,10 +194,12 @@ void forward_selection(vector<vector<double> > data){
     << std::fixed << std::setprecision(2) << 
     leave_one_out_cross_validation(data,{},0)*100 << "%" << endl;
 
+// Outer loop: iterate up to total number of features, adding one per level
+// Inner loop: test all candidate features not yet in the current set
     for(int i = 1; i <= total_features; i++){
 
         int feature_to_add_to_this_level = 0;
-        double best_so_far_acccuracy = 0;
+        double best_so_far_accuracy = 0;
 
         for(int j = 1; j <= total_features; j++){
             if(current_set_of_features.find(j) == current_set_of_features.end()){
@@ -201,8 +217,10 @@ void forward_selection(vector<vector<double> > data){
                 cout << "Using feature(s) {" << output_vec << "} accuracy is "
                 << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
 
-                if(accuracy > best_so_far_acccuracy){
-                    best_so_far_acccuracy = accuracy;
+                if(accuracy > best_so_far_accuracy){
+                    // Update best_so_far_accuracy and feature_to_add_to_this_level
+                    // This tracks the best feature to add at this level
+                    best_so_far_accuracy = accuracy;
                     feature_to_add_to_this_level = j;
                 }
             }
@@ -210,9 +228,10 @@ void forward_selection(vector<vector<double> > data){
         // Always add best feature this level
         current_set_of_features.insert(feature_to_add_to_this_level);
 
-        if(best_so_far_acccuracy >= best_overall_accuracy){ // Store best accuracy and features
+        // Update best_overall_features if accuracy improves
+        if(best_so_far_accuracy >= best_overall_accuracy){ // Store best accuracy and features
 
-            best_overall_accuracy = best_so_far_acccuracy;
+            best_overall_accuracy = best_so_far_accuracy;
             best_overall_features.push_back(feature_to_add_to_this_level);
 
             std::sort(best_overall_features.begin(), best_overall_features.end());
@@ -228,7 +247,7 @@ void forward_selection(vector<vector<double> > data){
      << best_overall_accuracy << "%" << endl;
 }
 
-void backward_elimination(vector<vector<double> > data){
+void backward_elimination(const vector<vector<double> >& data){
     unordered_set<int> current_set_of_features;
     vector<int> best_overall_features;
 
@@ -248,14 +267,17 @@ void backward_elimination(vector<vector<double> > data){
     cout << "Using feature(s) {" << current_vec << "} accuracy is " 
     << std::fixed << std::setprecision(2) << best_overall_accuracy << "%" << endl;
 
+    // Outer loop: iterate up to total_features times, removing one feature per level
+    // Inner loop: test removal of each feature currently in the set
     for(int i = 1; i <= total_features; i++){
 
         int feature_to_remove_this_level = 0;
-        double best_so_far_acccuracy = 0;
+        double best_so_far_accuracy = 0;
 
         for(int j = 1; j <= total_features; j++){
             if(current_set_of_features.find(j) != current_set_of_features.end()){
-                // Temporarily remove j to test without it
+                // Temporarily remove feature j and compute accuracy
+                // Keep track of feature whose removal improves accuracy the most
                 unordered_set<int> temp_set = current_set_of_features;
                 temp_set.erase(j);
 
@@ -270,8 +292,8 @@ void backward_elimination(vector<vector<double> > data){
                 cout << "Using feature(s) {" << output_vec << "} accuracy is "
                 << std::fixed << std::setprecision(2) << accuracy << "%" << endl;
 
-                if(accuracy > best_so_far_acccuracy){
-                    best_so_far_acccuracy = accuracy;
+                if(accuracy > best_so_far_accuracy){
+                    best_so_far_accuracy = accuracy;
                     feature_to_remove_this_level = j;
                 }
             }
@@ -279,8 +301,9 @@ void backward_elimination(vector<vector<double> > data){
         // Always remove best feature this level
         current_set_of_features.erase(feature_to_remove_this_level);
 
-        if(best_so_far_acccuracy >= best_overall_accuracy){
-            best_overall_accuracy = best_so_far_acccuracy;
+        // Update best_overall_features if accuracy improves
+        if(best_so_far_accuracy >= best_overall_accuracy){
+            best_overall_accuracy = best_so_far_accuracy;
 
             best_overall_features = vector<int>(current_set_of_features.begin(),
             current_set_of_features.end());
